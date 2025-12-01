@@ -96,12 +96,12 @@ async function init(levelIndex = 0) {
 }
 
 function loop() {
-    update();
+    updatePlayState();
     draw();
     requestAnimationFrame(loop);
 }
 
-function update() {
+function updatePlayState() {
 
     if (isGameOver) {
         return;
