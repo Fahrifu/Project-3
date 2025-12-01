@@ -34,6 +34,19 @@ let components = [];
 
 let isGameOver = false;
 
+let gameState = GAME_STATES.init;
+let hasGameStarted = false;
+
+let splashCounter = 0;
+const SPLASH_FRAMES = 180; // ~3 sec at 60 fps
+
+let menuSelectedIndex = 0;
+const MENU_ITEMS = [
+    "Start Game",
+    "Instructions",
+    "Quit"
+];
+
 //#region GAME ENGINE
 
 async function init() {
