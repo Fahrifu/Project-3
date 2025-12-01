@@ -233,6 +233,11 @@ function update() {
 
     }
 
+    if (gameState === GAME_STATES.menu) {
+        updateMenu();
+        return;
+    }
+
     
 }
 
