@@ -187,6 +187,36 @@ function updatePlayState() {
 
 }
 
+function updateMenu() {
+
+    if (KEYS.ArrowUp) {
+        menuSelectedIndex--;
+    } else if (KEYS.ArrowDown) {
+        menuSelectedIndex++;
+    }
+
+    if (menuSelectedIndex < 0) {
+        menuSelectedIndex = MENU_ITEMS.length - 1;
+    }
+    if (menuSelectedIndex >= MENU_ITEMS.length) {
+        menuSelectedIndex = 0;
+    }
+
+    if (KEYS.Enter) {
+        const choice = MENU_ITEMS[menuSelectedIndex];
+
+        if (choice === "Start Game") {
+            init(0);
+            gameState = GAME_STATES.play;
+        } else if (choice === "Instructions") {
+            gameState = GAME_STATES.pause;
+        } else if (choice === "Quit") {
+            gameState = GAME_STATES.idle;
+        }
+    }
+}
+
+
 
 function draw() {
     ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
