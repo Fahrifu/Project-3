@@ -238,6 +238,13 @@ function update() {
         return;
     }
 
+    if (gameState === GAME_STATES.pause) {
+        if (KEYS.Enter || KEYS.Escape) {
+            gameState = GAME_STATES.menu;
+        }
+        return;
+    }
+
     
 }
 
