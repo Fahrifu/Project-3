@@ -330,11 +330,46 @@ function drawSplashScreen() {
     ctx.restore();
 }
 
+function drawMenuScreen() {
+    ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+    ctx.save();
+
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+    
+    ctx.fillStyle = "white";
+    ctx.font = "36px 'Jacquard 12'";
+    let title = "Main Menu";
+    let bounds = Tools.getTextBounds(ctx, title);
+    let x = (_width * 0.5) - (bounds.width * 0.5);
+    let y = DIMENSIONS.padding * 3;
+    ctx.fillText(title, x, y);
+
+    ctx.font = "20px 'Tiny5'";
+    for (let i = 0; i < MENU_ITEMS.length; i++) {
+        const label = (i === menuSelectedIndex ? ">" : " ") + MENU_ITEMS[i];
+        bounds = Tools.getTextBounds(ctx, label);
+        x = (_width * 0.5) - (bounds.width * 0.5);
+        y += DIMENSIONS.tileDimension * 2;
+        ctx.fillText(label, x, y);
+    }
+
+    ctx.restore();
+}
+
 function draw() {
+
     if (gameState === GAME_STATES.init) {
         drawSplashScreen();
         return;
     }
+
+    if (gameState === GAME_STATES.menu) {
+        drawMenuScreen();
+        return;
+    }
+
+    drawPlayState();
 }
 
 //#endregion
