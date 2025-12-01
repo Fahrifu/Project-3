@@ -232,6 +232,8 @@ function update() {
         return;
 
     }
+
+    
 }
 
 function draw() {
