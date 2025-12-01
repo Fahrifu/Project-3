@@ -28,7 +28,9 @@ canvas.setAttribute("height", DIMENSIONS.totalHeight);
 const PLAYER_SYMBOLE = "H"
 
 const LEVEL_FILES = [ // Easier to added more level later
-    "./levels/level1.lvl"
+    "./levels/level1.lvl",
+    "./levels/level2.lvl",
+    "./levels/level3.lvl"
 ]
 
 let currentLevelIndex = 0;
