@@ -257,6 +257,32 @@ function update() {
     }
 }
 
+function draw() {
+
+    if (gameState === GAME_STATES.init) {
+        drawSplashScreen();
+        return;
+    }
+
+    if (gameState === GAME_STATES.menu) {
+        drawMenuScreen();
+        return;
+    }
+
+    if (gameState === GAME_STATES.pause) {
+        drawInstructionScreen();
+        return;
+    }
+
+    if (gameState === GAME_STATES.idle) {
+        drawIdleScreen();
+        return;
+    }
+
+    drawPlayState();
+}
+
+
 function drawPlayState() {
     ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
 
@@ -385,23 +411,22 @@ function drawInstructionScreen() {
     ctx.restore();
 }
 
-function draw() {
+function drawIdleScreen() {
+    ctx.clearRect(0, 0, canvas.clientWidth, canvas.clientHeight);
+    ctx.save();
 
-    if (gameState === GAME_STATES.init) {
-        drawSplashScreen();
-        return;
-    }
+    ctx.fillStyle = "black";
+    ctx.fillRect(0, 0, canvas.clientWidth, canvas.clientHeight);
 
-    if (gameState === GAME_STATES.menu) {
-        drawMenuScreen();
-        return;
-    }
+    ctx.fillStyle = "white";
+    ctx.font = "32px 'Jacquard 12'";
+    const txt = "Thanks for Playing!";
+    const bounds = Tools.getTextBounds(ctx, txt);
+    const x = (_width * 0.5) - (bounds.width * 0.5);
+    const y = (_height * 0.5);
+    ctx.fillText(txt, x, y);
 
-    if (gameState === GAME_STATES.pause) {
-        drawInstructionScreen();
-    }
-
-    drawPlayState();
+    ctx.restore();
 }
 
 //#endregion
