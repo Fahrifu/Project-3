@@ -207,6 +207,25 @@ async function updatePlayState() {
                     addComment("The healer nods. You are already in perfect health");
                 }
             }
+            else if (component.symbole == "G") {
+
+                let stoleSomething = false;
+
+                if (Player.hasItemInInventory("Key")) {
+                    Player.removeFromInventory("Key");
+                    stoleSomething = true;
+                    addComment("A sneaky thief steals your key!");
+                }
+
+                if (!stoleSomething) {
+                    if (player.health > Player.MIN_HEALTH) {
+                        player.health = Math.max(Player.MIN_HEALTH, player.health - 2);
+                        addComment("The thief bumps into you. -2 health");
+                    } else {
+                        addComment("The thief finds nothing to steal.");
+                    }
+                }
+            }
             else {
                 keep.push(component)
                 tr = player.row;
