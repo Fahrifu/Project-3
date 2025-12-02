@@ -208,9 +208,9 @@ async function updatePlayState() {
                     });
 
                     if (isHealing) {
-                        addComment("")
+                        addComment("You drink " + component.name + ". It will heal you over time")
                     } else {
-                        addComment("")
+                        addComment("You drink " + component.name + "... You feel sick. Poison drains your health over time!")
                     }
                 } else if (component.attribute === "strength") {
 
@@ -225,7 +225,7 @@ async function updatePlayState() {
                         remainingTurns: duration
                     });
 
-                    addComment("")
+                    addComment("You drink " + component.name + ". Your strength surges for a while!")
                 }
             }
             else if (component.symbole == "F"){
@@ -315,6 +315,51 @@ function updateMenu() {
             gameState = GAME_STATES.idle;
         }
     }
+}
+
+function updateActiveEffects() {
+    
+    let remaining = [];
+
+    for (let i = 0; i < activeEffects.length; i++) {
+        let effect = activeEffects[i];
+
+        if (effect.type === "heal" || effect.type === "poison") {
+
+            let newHealth = player.health + effect.amountPerTurn;
+            newHealth = Tools.clamp(newHealth, Player.MIN_HEALTH, Player.MAX_HEALTH);
+            player.health = newHealth
+
+            effect.remainingTurns--;
+
+            if (effect.remaining > 0) {
+                remaining.push(effect);
+            } else {
+                if (effect.type === "heal") {
+                    addComment("The healing effect wears off");
+                } else {
+                    addComment("The poison has left your system");
+                }
+            }
+            
+            if (player.health <= Player.MIN_HEALTH) {
+                isGameOver = true;
+            }
+
+        } else if (effect.type === "buff") {
+            
+            effect.remainingTurns--;
+
+            if (effect.remainingTurns > 0) {
+                remaining.push(effect);
+            } else {
+                player[effect.attribute] -= effect.amount;
+                addComment("The elixir wears off. You feel normal again")
+            }
+        }
+    }
+
+    activeEffects = remaining;
 }
 
 function update() {
