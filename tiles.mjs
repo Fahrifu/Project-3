@@ -84,6 +84,15 @@ const TILES = {
             //drawImage(image, sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight)
             ctx.drawImage(SPRITES.monsters.image, sx, sy, SPRITES.monsters.dim, SPRITES.monsters.dim, x, y, dim, dim);
         }
+    },
+    "F": {
+        symbole: "F", draw: (ctx, x, y, dim) => {
+            let col = 1;
+            let row = 0;
+            let sx = (col * SPRITES.monsters.dim) + SPRITES.monsters.offsetX;
+            let sy = (row * SPRITES.monsters.dim) + SPRITES.monsters.offsetY;
+             ctx.drawImage(SPRITES.monsters.image, sx, sy, SPRITES.monsters.dim, SPRITES.monsters.dim, x, y, dim, dim);
+        }
     }
 }
 
