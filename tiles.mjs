@@ -91,7 +91,16 @@ const TILES = {
             let row = 0;
             let sx = (col * SPRITES.monsters.dim) + SPRITES.monsters.offsetX;
             let sy = (row * SPRITES.monsters.dim) + SPRITES.monsters.offsetY;
-             ctx.drawImage(SPRITES.monsters.image, sx, sy, SPRITES.monsters.dim, SPRITES.monsters.dim, x, y, dim, dim);
+            ctx.drawImage(SPRITES.monsters.image, sx, sy, SPRITES.monsters.dim, SPRITES.monsters.dim, x, y, dim, dim);
+        }
+    },
+    "G": {
+        symbole: "G", draw: (ctx, x, y, dim) => {
+            let col = 2;
+            let row = 0;
+            let sx = (col * SPRITES.monsters.dim) + SPRITES.monsters.offsetX;
+            let sy = (row * SPRITES.monsters.dim) + SPRITES.monsters.offsetY;
+            ctx.drawImage(SPRITES.monsters.image, sx, sy, SPRITES.monsters.dim, SPRITES.monsters.dim, x, y, dim, dim);
         }
     }
 }
