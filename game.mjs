@@ -139,6 +139,10 @@ function loop() {
 async function updatePlayState() {
 
     if (isGameOver) {
+        if (KEYS.Enter) {
+            init(0);
+            return;
+        }
         return;
     }
 
@@ -310,7 +314,7 @@ async function updatePlayState() {
 
                 Player.addToInventory(component.name);
 
-                addComment("You equip " + component);
+                addComment("You equip " + component.name);
             }
             else if (component.symbole == Component.ids.teleport && !hasTeleportedThisTurn) {
 
@@ -318,7 +322,7 @@ async function updatePlayState() {
                 let targetCol = tc;
 
                 for (let other of components) {
-                    if (other.symbole == components.ids.teleport &&
+                    if (other.symbole == Component.ids.teleport &&
                         other.pairId === component.pairId &&
                         (other.row !== component.row || other.col !== component.col)) {
 
@@ -414,7 +418,7 @@ function updateActiveEffects() {
 
             effect.remainingTurns--;
 
-            if (effect.remaining > 0) {
+            if (effect.remainingTurns > 0) {
                 remaining.push(effect);
             } else {
                 if (effect.type === "heal") {
@@ -542,8 +546,8 @@ function drawPlayState() {
     // It can be done much cleaner, infact there are clues in the current loop as to how it could be made cleaner.
     for (let item of components) {
 
-        let y = (item.row * _td) + _sx;
-        let x = (item.col * _td) + _sy;
+        let y = (item.row * _td) + _sy;
+        let x = (item.col * _td) + _sx;
 
         try {
             if (item.symbole == "P") {
@@ -571,6 +575,13 @@ function drawPlayState() {
         let x = (_width * 0.5) - (bounds.width * 0.5);
         let y = (_height * 0.5) - (bounds.height * 0.5);
         ctx.fillText(txt, x, y);
+
+        ctx.font = "18px 'Tiny5'";
+        const subtitle = "Press Enter to Reset";
+        bounds = Tools.getTextBounds(ctx, subtitle);
+        x = (_width * 0.5) - (bounds.width * 0.5);
+        y += DIMENSIONS.tileDimension * 3;
+        ctx.fillText(subtitle, x, y);
     } else {
         drawComments(ctx);
     }
@@ -579,8 +590,6 @@ function drawPlayState() {
     if (debug) {
         displayDebugInfo(ctx)
     }
-
-    ctx.restore();
 }
 
 function drawSplashScreen() {
@@ -684,23 +693,45 @@ function drawIdleScreen() {
 
 
 function drawHUD(ctx) {
+    ctx.save();
+
     let healthDisplay = ["❤️", "❤️", "💛", "💛", "💛", "💚", "💚", "💚", "💚", "💚"].slice(0, player.health).join("");
     healthDisplay = healthDisplay.padEnd(Player.MAX_HEALTH * 2, "💀");
-    ctx.fillText(healthDisplay, DIMENSIONS.padding, DIMENSIONS.padding * 0.75);
+    ctx.textAlign = "center";
+    ctx.textBaseline = "top"
+    ctx.fillText(healthDisplay, _width * 0.5, DIMENSIONS.padding * 0.5);
 
-    let inventoryText = getInventoryDisplayText();
-    ctx.fillText(inventoryText, DIMENSIONS.padding, DIMENSIONS.padding * 2);
+    ctx.textAlign = "right";
+    ctx.textBaseline = "top";
+
+    const x = _width - DIMENSIONS.padding;
+    let y = DIMENSIONS.padding * 2;
+
+    ctx.fillText("Inventory:", x, y);
+    y += DIMENSIONS.tileDimension * 1.2;
 
     if (player.weapon) {
-        let weaponText = "Equipped: " + player.weapon;
-        ctx.fillText(weaponText, DIMENSIONS.padding, DIMENSIONS.padding * 3.25);
+        ctx.fillText("Equipped: " + player.weapon, x, y);
+        y += DIMENSIONS.tileDimension * 1.2;
     }
+
+    const inventoryText = getInventoryDisplayText();
+
+    if (inventoryText === 0) {
+        ctx.fillText("(empty)", x, y);
+    } else {
+        for (let i = 0; i < inventoryText.length; i++) {
+            ctx.fillText(inventoryText[i], x, y);
+            y += DIMENSIONS.tileDimension * 1.2;
+        }
+    }
+    ctx.restore();
 }
 //#endregion
 
 function getInventoryDisplayText() {
     if (!player || !player.inventory) {
-        return "Inventory: (empty)";
+        return [];
     }
 
     let parts = [];
@@ -722,11 +753,7 @@ function getInventoryDisplayText() {
         }
     }
 
-    if (parts.length === 0) {
-        return "Inventory: (empty)"
-    }
-
-    return "Inventory: " + parts.join(", ");
+    return parts;
 }
 
 //#region utility functions
