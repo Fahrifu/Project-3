@@ -8,6 +8,7 @@ import { addComment, drawComments, getComments, updateComments } from "./comment
 import Zombie from "./components/zombie.mjs";
 import Component from "./components/component.mjs";
 import Player from "./components/player.mjs";
+import Weapon from "./components/weapon.mjs";
 import Potion from "./components/potion.mjs";
 import Tools from "./util.mjs";
 
@@ -88,6 +89,9 @@ async function init(levelIndex = 0) {
                     break;
 
                 case Component.ids.potion: comp = Potion.createPotion(level.components[i]);
+                    break;
+                
+                case Component.ids.weapon: comp = Weapon.createWeapon(level.components[i]);
                     break;
 
                 default: comp = Component.createComponent(level.components[i]);
@@ -275,6 +279,26 @@ async function updatePlayState() {
                         addComment("The thief finds nothing to steal.");
                     }
                 }
+            }
+            else if (component.symbole == Component.ids.weapon) {
+
+                if (player.weaponAttackBonus != undefined) {
+                    player.strength -= player.weaponAttackBonus;
+                    player.force.max -= player.weaponForceBonus;
+                }
+
+                player.weapon = component.name;
+                player.weaponAttackBonus = component.attackBonus;
+                player.weaponForceBonus = component.attackBonus;
+
+                player.strength += player.weaponAttackBonus;
+                player.force.max += player.weaponForceBonus;
+
+                player.weaponSpriteRow = component.heroRow;
+
+                Player.addToInventory(component.name);
+
+                addComment("You equip " + component);
             }
             else {
                 keep.push(component)
@@ -467,6 +491,8 @@ function drawPlayState() {
         try {
             if (item.symbole == "P") {
                 Potion.draw(ctx, item);
+            } else if (item.symbole == Component.ids.weapon) {
+                Weapon.draw(ctx, item);
             } else {
                 TILES[item.symbole].draw(ctx, x, y, _td, _td);
             }
