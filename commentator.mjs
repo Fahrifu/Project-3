@@ -37,4 +37,8 @@ function drawComments(ctx) {
     }
 }
 
+if (comments > 5) {
+    comments = comments.slice(comments.length - 6);
+}
+
 export { addComment, getComments, updateComments, drawComments };

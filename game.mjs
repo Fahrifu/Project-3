@@ -445,12 +445,19 @@ function updateActiveEffects() {
 }
 
 function updateCamera() {
-    cameraX = (player.col * _td) - (VIEW_WIDTH * _td / 2);
-    cameraY = (player.row * _td) - (VIEW_HEIGHT * _td / 2);
+    const viewPixelWidth  = VIEW_WIDTH * _td;
+    const viewPixelHeight = VIEW_HEIGHT * _td;
 
-    cameraX = Math.max(0, Math.min(cameraX, _width - VIEW_WIDTH * _td));
-    cameraY = Math.max(0, Math.min(cameraY, _height - VIEW_HEIGHT * _td));
+    const heroX = _sx + player.col * _td;
+    const heroY = _sy + player.row * _td;
+
+    cameraX = heroX - viewPixelWidth / 2;
+    cameraY = heroY - viewPixelHeight / 2;
+
+    cameraX = Math.max(0, Math.min(cameraX, _width  - viewPixelWidth));
+    cameraY = Math.max(0, Math.min(cameraY, _height - viewPixelHeight));
 }
+
 
 function update() {
     
@@ -525,9 +532,11 @@ function drawPlayState() {
 
     ctx.save();
 
+    ctx.translate(-cameraX, -cameraY);
+
     ctx.drawImage(background, 0, 0);
-    Player.draw(ctx);
-    drawHUD(ctx);
+
+
 
     // The following loop draws all the remaning items.
     // It can be done much cleaner, infact there are clues in the current loop as to how it could be made cleaner.
@@ -549,6 +558,10 @@ function drawPlayState() {
         }
 
     }
+
+    Player.draw(ctx);
+    ctx.restore();
+    drawHUD(ctx);
 
     if (isGameOver) {
         ctx.fillStyle = "White";
@@ -677,6 +690,11 @@ function drawHUD(ctx) {
 
     let inventoryText = getInventoryDisplayText();
     ctx.fillText(inventoryText, DIMENSIONS.padding, DIMENSIONS.padding * 2);
+
+    if (player.weapon) {
+        let weaponText = "Equipped: " + player.weapon;
+        ctx.fillText(weaponText, DIMENSIONS.padding, DIMENSIONS.padding * 3.25);
+    }
 }
 //#endregion
 
