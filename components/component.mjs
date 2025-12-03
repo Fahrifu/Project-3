@@ -13,7 +13,8 @@ const COMPONENTS = {
     key: "K",
     potion: "P",
     door: "D",
-    trap: "R"
+    trap: "R",
+    weapon: "W"
 }
 
 function createComponent(data) {

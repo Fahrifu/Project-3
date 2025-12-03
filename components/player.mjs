@@ -23,6 +23,11 @@ function createPlayer(data) {
         dodge: 0.2,
         dexterity: 0.5,
         force: { min: 1, max: 5 },
+
+        weapon: null,
+        weaponSpriteRow: cellRow,
+        weaponAttackBonus: 0,
+        weaponForceBonus: 0
     }
 
     return player;
@@ -42,6 +47,7 @@ function draw(ctx) {
     }
 
     // And now we actualy draw the players representation
+    let row = player.weaponSpriteRow != undefined ? player.weaponSpriteRow : cellRow;
     Component.draw(ctx, player, SPRITES.heros, cell, cellRow);
 
 }
